@@ -1,0 +1,25 @@
+version: '3'  #specifies docker compose version
+
+networks:
+  web:
+    external: true
+
+services:
+  escritorio:
+    container_name: frontend-escritorio
+    networks:
+      - web
+    build:
+      context: ./
+    volumes:
+      - frontnend-escritorio:/app
+    restart: "always"
+    command: "nginx -g 'daemon off;'"
+    labels:
+      - traefik.http.routers.escritorio.rule=Host(`sim.lacosta.gob.ar`,`sim2.lacosta.gob.ar`)
+      - traefik.http.routers.escritorio.tls=true
+      - traefik.http.routers.escritorio.tls.certresolver=lets-encrypt
+      - traefik.port=80
+
+volumes:
+  frontnend-escritorio:
